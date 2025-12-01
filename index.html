@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HelpToHeal – Natural Medicine Matrix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #f6f5f1;
+      --card-bg: #ffffff;
+      --accent: #4aaea3; /* between green and blue */
+      --accent-soft: #b7e2dd;
+      --accent-deep: #2f6f6b;
+      --text-main: #1f2a30;
+      --text-soft: #4b5a63;
+      --danger: #c64848;
+      --border-soft: #dde2e0;
+      --shadow-soft: 0 18px 45px rgba(16, 38, 36, 0.14);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e1f3ef 0, var(--bg) 48%, #ecf0f0 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: linear-gradient(135deg, #fbfbfa, #f2f7f6);
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(74, 174, 163, 0.16);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(186, 236, 227, 0.4) 0, transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(133, 210, 203, 0.35) 0, transparent 55%),
+        radial-gradient(circle at 20% 100%, rgba(225, 243, 239, 0.9) 0, transparent 55%);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    header.app-header {
+      padding: 18px 22px 8px;
+      border-bottom: 1px solid rgba(189, 207, 203, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 18px;
+      background: conic-gradient(from 210deg, #4aaea3, #7fd9cc, #c4f3ea, #4aaea3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 28px rgba(13, 54, 52, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 60%;
+      height: 60%;
+      border-radius: 50%;
+      border: 2px solid rgba(246, 249, 248, 0.85);
+      box-shadow: inset 0 0 0 1px rgba(13, 40, 38, 0.2);
+    }
+
+    .brand-core-dot {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #fefefe;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+      animation: corePulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes corePulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      60% { transform: scale(1.45); opacity: 0.4; }
+      100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    .header-text {
+      flex: 1;
+    }
+
+    .header-text h1 {
+      font-size: 1.15rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-weight: 650;
+      color: var(--accent-deep);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-text h1 span.badge {
+      font-size: 0.7rem;
+      text-transform: none;
+      font-weight: 550;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: rgba(74, 174, 163, 0.1);
+      border: 1px solid rgba(74, 174, 163, 0.35);
+      color: var(--accent-deep);
+    }
+
+    .header-text p {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .pill-label {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(74, 174, 163, 0.35);
+      background: rgba(225, 243, 239, 0.85);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-label span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 5px rgba(74, 174, 163, 0.9);
+    }
+
+    .pill-label small {
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 600;
+      font-size: 0.68rem;
+      color: var(--accent-deep);
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(260px, 2.1fr);
+      gap: 18px;
+      padding: 10px 18px 18px;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .main-panel,
+    .side-panel {
+      border-radius: 22px;
+      background: hsla(160, 30%, 98%, 0.92);
+      box-shadow: 0 10px 35px rgba(10, 32, 30, 0.08);
+      border: 1px solid rgba(193, 211, 207, 0.9);
+      padding: 16px 16px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom right,
+          rgba(74, 174, 163, 0.08),
+          transparent 45%,
+          rgba(234, 244, 242, 0.9));
+      opacity: 0.7;
+      z-index: -1;
+    }
+
+    .side-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(120, 200, 190, 0.45) 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(210, 231, 228, 0.95) 0, transparent 55%);
+      opacity: 0.7;
+      z-index: -1;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 650;
+      color: var(--accent-deep);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title span.line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right,
+        rgba(74, 174, 163, 0.55),
+        rgba(74, 174, 163, 0.05));
+      max-width: 120px;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 999px;
+      background: rgba(219, 231, 229, 0.8);
+      border: 1px solid rgba(176, 197, 193, 0.9);
+      gap: 4px;
+    }
+
+    .nav-tab {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--text-soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .nav-tab span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(74, 174, 163, 0.35);
+    }
+
+    .nav-tab.active {
+      background: #ffffff;
+      box-shadow: 0 6px 16px rgba(8, 26, 24, 0.22);
+      color: var(--accent-deep);
+    }
+
+    .nav-tab.active span.dot {
+      background: var(--accent);
+      box-shadow: 0 0 7px rgba(74, 174, 163, 0.9);
+    }
+
+    .page {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .medicine-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: calc(100vh - 210px);
+      overflow: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(151, 176, 171, 0.9) transparent;
+    }
+
+    .medicine-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .medicine-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .medicine-list::-webkit-scrollbar-thumb {
+      background: rgba(141, 168, 163, 0.85);
+      border-radius: 999px;
+    }
+
+    .medicine-card {
+      background: rgba(253, 254, 253, 0.9);
+      border-radius: 20px;
+      border: 1px solid rgba(186, 206, 202, 0.9);
+      box-shadow: 0 10px 30px rgba(13, 40, 37, 0.08);
+      padding: 10px 12px 11px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.3fr);
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .medicine-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0 0, rgba(186, 229, 222, 0.3) 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(230, 243, 241, 0.8) 0, transparent 55%);
+      opacity: 0.65;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .card-header-row {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .condition-name {
+      font-size: 0.96rem;
+      font-weight: 620;
+      color: var(--text-main);
+    }
+
+    .condition-tagline {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .spectrum-pill {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(151, 174, 169, 0.9);
+      background: linear-gradient(90deg,
+        rgba(65, 92, 136, 0.3),
+        rgba(74, 174, 163, 0.15),
+        rgba(179, 123, 74, 0.28));
+      color: #1e252b;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spectrum-pill span.segment {
+      width: 14px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #415c88, #4aaea3, #b37b4a);
+      box-shadow: 0 0 4px rgba(74, 174, 163, 0.9);
+    }
+
+    .mode-indicator {
+      font-size: 0.74rem;
+      font-weight: 540;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--accent-deep);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-indicator span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 7px rgba(74, 174, 163, 0.95);
+    }
+
+    .cards-columns {
+      display: contents;
+    }
+
+    .med-column {
+      border-radius: 16px;
+      padding: 8px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+    }
+
+    .med-column.conventional {
+      background: rgba(64, 93, 133, 0.08);
+      border: 1px solid rgba(93, 124, 165, 0.3);
+    }
+
+    .med-column.natural {
+      background: rgba(74, 174, 163, 0.11);
+      border: 1px solid rgba(74, 174, 163, 0.4);
+    }
+
+    .med-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .med-label span.badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(166, 188, 184, 0.9);
+      background: rgba(247, 250, 249, 0.92);
+      color: var(--text-soft);
+      text-transform: none;
+      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+
+    .med-name {
+      font-size: 0.86rem;
+      font-weight: 620;
+      color: var(--text-main);
+    }
+
+    .med-description {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      line-height: 1.35;
+    }
+
+    .med-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+
+    .chip {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(173, 195, 191, 0.95);
+      background: rgba(249, 252, 251, 0.92);
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chip span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .origin-label {
+      font-size: 0.74rem;
+      color: #607077;
+      margin-top: 2px;
+    }
+
+    .slider-row {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-track-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #6d7c81;
+      font-weight: 560;
+    }
+
+    .slider-track-labels span {
+      opacity: 0.85;
+    }
+
+    .slider-track-labels span.mid {
+      font-size: 0.66rem;
+      letter-spacing: 0.2em;
+    }
+
+    .mode-conventional .med-column.conventional {
+      box-shadow: 0 0 0 1px rgba(93, 124, 165, 0.4), 0 0 0 1px rgba(247, 250, 249, 0.8);
+      background: radial-gradient(circle at top, rgba(93, 124, 165, 0.16), rgba(64, 93, 133, 0.05));
+    }
+
+    .mode-conventional .med-column.natural {
+      opacity: 0.6;
+      filter: grayscale(0.25);
+    }
+
+    .mode-natural .med-column.natural {
+      box-shadow: 0 0 0 1px rgba(74, 174, 163, 0.55), 0 0 0 1px rgba(247, 250, 249, 0.9);
+      background: radial-gradient(circle at top, rgba(74, 174, 163, 0.16), rgba(74, 174, 163, 0.06));
+    }
+
+    .mode-natural .med-column.conventional {
+      opacity: 0.6;
+      filter: grayscale(0.25);
+    }
+
+    .mode-blend .med-column.conventional,
+    .mode-blend .med-column.natural {
+      opacity: 0.9;
+      filter: none;
+      box-shadow: none;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #415c88, #4aaea3, #b37b4a);
+      outline: none;
+      margin-top: 2px;
+      position: relative;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fefefe;
+      border: 2px solid var(--accent-deep);
+      box-shadow: 0 3px 8px rgba(12, 34, 32, 0.3),
+                  0 0 0 4px rgba(74, 174, 163, 0.25);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fefefe;
+      border: 2px solid var(--accent-deep);
+      box-shadow: 0 3px 8px rgba(12, 34, 32, 0.3),
+                  0 0 0 4px rgba(74, 174, 163, 0.25);
+      cursor: pointer;
+    }
+
+    .page-copy {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .page-copy p strong {
+      color: var(--text-main);
+    }
+
+    .page-copy ul {
+      margin-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .page-copy li {
+      list-style: disc;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .stat-chip {
+      flex: 1 1 90px;
+      min-width: 0;
+      border-radius: 14px;
+      padding: 6px 8px;
+      border: 1px solid rgba(180, 200, 196, 0.95);
+      background: rgba(249, 252, 251, 0.94);
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-chip span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.66rem;
+      color: #708085;
+      font-weight: 580;
+    }
+
+    .stat-chip strong {
+      font-size: 0.84rem;
+      color: var(--text-main);
+    }
+
+    .disclaimer-card {
+      margin-top: 10px;
+      padding: 8px 9px;
+      border-radius: 14px;
+      border: 1px solid rgba(198, 132, 76, 0.7);
+      background: rgba(254, 246, 238, 0.96);
+      font-size: 0.78rem;
+      color: #6b4a2a;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .disclaimer-card span.icon {
+      font-size: 1.2rem;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .disclaimer-card p strong {
+      font-weight: 650;
+    }
+
+    .side-section {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(176, 197, 193, 0.8);
+    }
+
+    .side-section h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-deep);
+      margin-bottom: 4px;
+    }
+
+    .timeline-list {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .timeline-item span.tap {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #748388;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .marker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .marker-strip {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #415c88, #4aaea3, #b37b4a);
+    }
+
+    .marker-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #6c7a7e;
+    }
+
+    .note-list {
+      margin-top: 5px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .note-list li {
+      list-style: none;
+      display: flex;
+      gap: 5px;
+    }
+
+    .note-list li span.bullet {
+      margin-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .side-panel {
+        order: -1;
+      }
+
+      header.app-header {
+        align-items: flex-start;
+      }
+
+      .header-meta {
+        display: none;
+      }
+
+      .medicine-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px 6px;
+      }
+
+      .app-shell {
+        border-radius: 18px;
+      }
+
+      header.app-header {
+        padding: 14px 14px 6px;
+      }
+
+      .app-layout {
+        padding: 8px 10px 12px;
+      }
+
+      .main-panel,
+      .side-panel {
+        padding: 12px 12px 14px;
+      }
+
+      .medicine-list {
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand-mark">
+        <div class="brand-core-dot"></div>
+      </div>
+      <div class="header-text">
+        <h1>
+          HelpToHeal
+          <span class="badge">Natural Medicines Matrix</span>
+        </h1>
+        <p>
+          A clean field to compare standard medicines with time-tested natural
+          supports – side by side on the same spectrum.
+        </p>
+      </div>
+      <div class="header-meta">
+        <div class="pill-label">
+          <span class="dot"></span>
+          <small>Reflection Tool – Not A Prescription</small>
+        </div>
+        <span>Anchored for: <strong>DietDiary · HelpToHeal</strong></span>
+      </div>
+    </header>
+
+    <div class="app-layout">
+      <section class="main-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            Matrix
+            <span class="line"></span>
+          </div>
+          <div class="nav-tabs" id="nav-tabs">
+            <button class="nav-tab active" data-page="page-matrix">
+              <span class="dot"></span>
+              Matrix
+            </button>
+            <button class="nav-tab" data-page="page-about">
+              <span class="dot"></span>
+              Origins
+            </button>
+            <button class="nav-tab" data-page="page-safety">
+              <span class="dot"></span>
+              Safety
+            </button>
+          </div>
+        </div>
+
+        <div id="page-matrix" class="page active">
+          <div class="medicine-list" id="medicine-list">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+
+        <div id="page-about" class="page">
+          <div class="page-copy">
+            <p>
+              Modern “scientific” medicines and natural remedies are not two
+              separate worlds – they are different points on the same
+              <strong>knowledge timeline</strong>.
+            </p>
+            <p>
+              Many over-the-counter drugs were only developed in the
+              <strong>last 50–100 years</strong>, often by refining or isolating
+              molecules first noticed in plants. Willow bark was brewed for pain
+              in the ancient world; much later, chemists turned that story into
+              aspirin and, later again, ibuprofen.
+            </p>
+            <p>
+              At the same time, “ancient” does not automatically mean “safe” or
+              “better”. Some traditional plants are toxic, interact badly with
+              medicines, or simply don’t work as well as hoped when properly
+              tested.
+            </p>
+            <p>
+              This app is not here to choose sides. It’s here so you can
+              <strong>see the whole spectrum</strong>:
+            </p>
+            <ul>
+              <li>
+                What standard medicine is usually offered for a common symptom.
+              </li>
+              <li>
+                Which <strong>natural supports</strong> people have used for
+                centuries or millennia.
+              </li>
+              <li>
+                How young the modern option is compared with the older
+                traditions.
+              </li>
+            </ul>
+            <p>
+              You stay in charge. Use this as an anchor for reflection and
+              conversation with qualified professionals, not as a replacement
+              for diagnosis or emergency care.
+            </p>
+
+            <div class="stat-row">
+              <div class="stat-chip">
+                <span class="label">Willow Bark Use</span>
+                <strong>Ancient cultures · &gt;2000 years</strong>
+                <span>Chewed/brewed for pain & fever.</span>
+              </div>
+              <div class="stat-chip">
+                <span class="label">Aspirin / Ibuprofen Era</span>
+                <strong>Late 1800s / 1960s</strong>
+                <span>Lab-designed from plant stories.</span>
+              </div>
+              <div class="stat-chip">
+                <span class="label">Proton Pump Inhibitors</span>
+                <strong>1970s–1980s</strong>
+                <span>Modern acid reflux medicines.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="page-safety" class="page">
+          <div class="page-copy">
+            <p>
+              <strong>Plain truth:</strong> some “natural” options are gentle
+              and supportive, some are powerful drugs in disguise, and some are
+              just not safe for you.
+            </p>
+            <ul>
+              <li>
+                <strong>Never stop or change prescribed medicine</strong> based
+                on this app alone.
+              </li>
+              <li>
+                Check everything with your GP, pharmacist, or another qualified
+                professional – especially if you are pregnant, have long-term
+                conditions, or take multiple medicines.
+              </li>
+              <li>
+                “Herbal” does not mean “risk-free”. Plants like St John’s wort,
+                willow bark, and others can interact with normal medication.
+              </li>
+              <li>
+                Children, older adults, and people with allergies or kidney /
+                liver problems need extra caution.
+              </li>
+            </ul>
+            <p>
+              Use this space to
+              <strong>notice patterns and options</strong>, then make decisions
+              in partnership with real-world care.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            Timeline Beam
+            <span class="line"></span>
+          </div>
+        </div>
+
+        <div class="marker-row">
+          <div class="marker-strip"></div>
+        </div>
+        <div class="marker-labels">
+          <span>Ancient Field</span>
+          <span>Lab Era</span>
+        </div>
+
+        <div class="side-section">
+          <h3>Quick Origins</h3>
+          <div class="timeline-list">
+            <div class="timeline-item">
+              <strong>Willow Bark</strong> – used for pain & fever in
+              Mediterranean and other cultures for thousands of years.
+              <span class="tap">Plant story → Aspirin → Ibuprofen</span>
+            </div>
+            <div class="timeline-item">
+              <strong>Ibuprofen</strong> – designed in England in the 1960s, on
+              pharmacy shelves from late 1960s onward.
+            </div>
+            <div class="timeline-item">
+              <strong>Proton Pump Inhibitors</strong> (like omeprazole) –
+              developed around 1970s, launched in the late 1980s.
+            </div>
+            <div class="timeline-item">
+              <strong>Ginger</strong> – written about in Asian medicine for
+              centuries, now also studied for motion sickness and nausea.
+            </div>
+          </div>
+        </div>
+
+        <div class="disclaimer-card">
+          <span class="icon">⚕️</span>
+          <p>
+            <strong>Medical disclaimer:</strong> this is for education and
+            reflection only. It does not diagnose, treat, or cure disease and is
+            not a replacement for personal medical advice. Always talk to a
+            doctor, pharmacist, or other qualified professional before changing
+            medicine or starting supplements.
+          </p>
+        </div>
+
+        <div class="side-section">
+          <h3>How To Use This</h3>
+          <ul class="note-list">
+            <li>
+              <span class="bullet">•</span>
+              <span>Pick a symptom card that fits what you’re dealing with.</span>
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <span>Slide from “Lab-Standard” toward “Natural Lineage”.</span>
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <span>
+                Read both sides. Notice time-lines, ingredients, and practical
+                steps.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <span>
+                Decide what to ask your doctor or nutrition professional next.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Core data: condition → conventional vs natural support
+    const medicinePairs = [
+      {
+        id: "headache-pain",
+        condition: "Headache & mild musculoskeletal pain",
+        tagline: "Everyday aches · Minor strains · Period pain",
+        conventional: {
+          name: "Ibuprofen (standard NSAID painkiller)",
+          description:
+            "Over-the-counter anti-inflammatory medicine often used for headaches, period pain, and mild joint/muscle aches.",
+          notes: [
+            "Follow the exact dose on the pack or from your prescriber.",
+            "Can irritate stomach, kidneys, or worsen asthma in some people.",
+          ],
+          origin:
+            "Designed in a UK lab in the 1950s–60s and launched in pharmacies from 1969 onward.",
+        },
+        natural: {
+          name: "White willow bark tea or extract",
+          description:
+            "Willow bark has been brewed for fever and pain since ancient times in Europe and the Mediterranean. It contains salicin, a chemical ancestor of aspirin-like medicines.",
+          notes: [
+            "Usually taken as a tea or standardized extract following product guidance.",
+            "Not suitable for children, pregnant people, or anyone allergic to aspirin / with bleeding or stomach ulcer risk.",
+          ],
+          origin:
+            "Referenced in classical medical writings over 2000 years ago; used in European folk medicine long before modern pharmacies.",
+        },
+      },
+      {
+        id: "heartburn-reflux",
+        condition: "Heartburn & acid reflux (mild, occasional)",
+        tagline: "Burning in chest · Acid up the throat",
+        conventional: {
+          name: "Omeprazole / other proton-pump inhibitors",
+          description:
+            "Modern medicines that reduce stomach acid production. Often taken as short courses for reflux, ulcers, and related conditions on medical advice.",
+          notes: [
+            "Some are prescription-only; in some countries low doses are sold over the counter.",
+            "Generally effective, but long-term use should always be checked with a doctor.",
+          ],
+          origin:
+            "First PPI molecules were developed in the 1970s and omeprazole was marketed from the late 1980s.",
+        },
+        natural: {
+          name: "Chamomile infusion + slower, lighter meals",
+          description:
+            "Chamomile tea is a traditional digestive soother across Europe and the Middle East. Many people also get relief from smaller, slower meals and not lying flat right after eating.",
+          notes: [
+            "Sip warm chamomile tea after meals if you tolerate it.",
+            "Avoid heavy late-night meals, alcohol, and trigger foods where possible.",
+          ],
+          origin:
+            "Chamomile has been used for digestion and sleep support since classical Greek and Egyptian times.",
+        },
+      },
+      {
+        id: "nausea-motion",
+        condition: "Nausea & motion sickness (non-emergency)",
+        tagline: "Travel sickness · Queasy stomach",
+        conventional: {
+          name: "Standard anti-sickness tablets",
+          description:
+            "Travel and motion sickness tablets sold in pharmacies (often antihistamines or related drugs) that reduce nausea and vomiting.",
+          notes: [
+            "Follow age limits and dosing on the pack; some cause drowsiness.",
+            "Some prescription anti-emetics are stronger and doctor-only.",
+          ],
+          origin:
+            "Many common motion-sickness medicines were developed and refined in the mid-1900s.",
+        },
+        natural: {
+          name: "Ginger root (tea, capsules, or crystallised)",
+          description:
+            "Ginger has a long history in Asian and Middle Eastern medicine as a stomach settler. Modern trials suggest it can help with motion sickness and some forms of nausea for many people.",
+          notes: [
+            "Common forms: fresh ginger tea, capsules, or ginger lozenges.",
+            "Can thin the blood slightly at higher doses; check with a professional if you use blood thinners, are pregnant, or have gallstones.",
+          ],
+          origin:
+            "Described in traditional Chinese and Ayurvedic texts hundreds of years ago; clinically studied for nausea in the last few decades.",
+        },
+      },
+      {
+        id: "sleep-anxiety",
+        condition: "Mild sleep difficulty & nervous tension",
+        tagline: "Busy mind · Difficulty winding down",
+        conventional: {
+          name: "Short-term sleep tablets / sedating antihistamines",
+          description:
+            "Pharmacy sleep aids and, in some cases, short courses of prescription sleeping pills used to reset short-term insomnia on medical advice.",
+          notes: [
+            "Can cause next-day drowsiness, dependence, or tolerance if over-used.",
+            "Always use strictly within medical guidance and never mix with alcohol.",
+          ],
+          origin:
+            "Most modern sleeping tablets were developed in the mid-20th century; over-the-counter sedating antihistamines followed later.",
+        },
+        natural: {
+          name: "Valerian / lemon balm tea + ritual wind-down",
+          description:
+            "Valerian root and lemon balm have been used in European herbalism as calming herbs that support sleep onset when combined with good sleep habits.",
+          notes: [
+            "Best used as part of a routine: dim lights, screens off, consistent bed-time.",
+            "Not suitable for everyone; can interact with other sedatives. Check with a professional if you take any regular medication.",
+          ],
+          origin:
+            "Valerian has roots in Greco-Roman medicine and medieval European herbal texts.",
+        },
+      },
+      {
+        id: "cough-cold",
+        condition: "Simple cough & common cold",
+        tagline: "Sore throat · Irritating dry cough",
+        conventional: {
+          name: "Cough mixtures & lozenges",
+          description:
+            "Off-the-shelf syrups and lozenges that soothe the throat, reduce cough reflex, or thin mucus, depending on the active ingredients.",
+          notes: [
+            "Some syrups are not suitable for children; always check age labels carefully.",
+            "Underlying chest infections, breathing trouble, or long-lasting coughs need medical review.",
+          ],
+          origin:
+            "Many modern cough formulas were standardised in the 20th century; stronger prescription options are doctor-only.",
+        },
+        natural: {
+          name: "Honey, lemon & thyme infusion",
+          description:
+            "Honey has been used in many cultures as a throat soother and mild cough reliever; thyme is a traditional respiratory herb in European folk medicine.",
+          notes: [
+            "Mix warm water, a spoon of honey, squeeze of lemon, and a little fresh or dried thyme.",
+            "Never give honey to children under 1 year old because of the risk of infant botulism.",
+          ],
+          origin:
+            "Kitchen medicine across Europe, North Africa, and the Middle East for many generations.",
+        },
+      },
+      {
+        id: "constipation-mild",
+        condition: "Mild, occasional constipation",
+        tagline: "Sluggish bowels · Travel or diet-related",
+        conventional: {
+          name: "Osmotic or bulk-forming laxatives",
+          description:
+            "Pharmacy laxatives (like lactulose or fibre-based products) that soften stools or help them hold more water, so they pass more easily.",
+          notes: [
+            "Short-term use only unless a doctor tells you otherwise.",
+            "Sudden changes in bowel habit, severe pain, or blood in stool always need urgent medical attention.",
+          ],
+          origin:
+            "Refined laxative products emerged across the 20th century, though simple mineral salts and fibres were used earlier.",
+        },
+        natural: {
+          name: "Prunes, flaxseed & water",
+          description:
+            "Dried fruits like prunes, plus ground flaxseed and good hydration, are classic natural supports for bowel regularity.",
+          notes: [
+            "Introduce extra fibre gradually and drink enough water to avoid bloating.",
+            "Movement (walking, gentle exercise) is a powerful bowel stimulant too.",
+          ],
+          origin:
+            "Food-based bowel remedies are mentioned in many traditional medical systems around the world.",
+        },
+      },
+    ];
+
+    function createMedicineCard(pair) {
+      const card = document.createElement("article");
+      card.className = "medicine-card mode-conventional";
+      card.dataset.id = pair.id;
+
+      card.innerHTML = `
+        <div class="card-header-row">
+          <div>
+            <div class="condition-name">${pair.condition}</div>
+            <div class="condition-tagline">${pair.tagline}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;min-width:0;">
+            <div class="spectrum-pill">
+              <span class="segment"></span>
+              Lab-Standard ⇄ Natural Lineage
+            </div>
+            <div class="mode-indicator">
+              <span class="dot"></span>
+              <span class="mode-indicator-label">Lab-Standard Focus</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cards-columns">
+          <div class="med-column conventional">
+            <div class="med-label">
+              Lab-Standard
+              <span class="badge">Usual medical approach</span>
+            </div>
+            <div class="med-name">${pair.conventional.name}</div>
+            <p class="med-description">${pair.conventional.description}</p>
+            <div class="med-meta">
+              ${pair.conventional.notes
+                .map(
+                  (note) =>
+                    `<span class="chip"><span class="dot"></span>${note}</span>`
+                )
+                .join("")}
+            </div>
+            <p class="origin-label">Origin: ${pair.conventional.origin}</p>
+          </div>
+
+          <div class="med-column natural">
+            <div class="med-label">
+              Natural Lineage
+              <span class="badge">Traditional support</span>
+            </div>
+            <div class="med-name">${pair.natural.name}</div>
+            <p class="med-description">${pair.natural.description}</p>
+            <div class="med-meta">
+              ${pair.natural.notes
+                .map(
+                  (note) =>
+                    `<span class="chip"><span class="dot"></span>${note}</span>`
+                )
+                .join("")}
+            </div>
+            <p class="origin-label">Origin: ${pair.natural.origin}</p>
+          </div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-track-labels">
+            <span>Lab-Standard</span>
+            <span class="mid">Blend</span>
+            <span>Natural</span>
+          </div>
+          <input type="range" min="0" max="100" value="0" aria-label="Lab-standard to natural spectrum slider">
+        </div>
+      `;
+
+      const slider = card.querySelector('input[type="range"]');
+      const label = card.querySelector(".mode-indicator-label");
+
+      const updateMode = () => {
+        const v = Number(slider.value);
+        card.classList.remove("mode-conventional", "mode-natural", "mode-blend");
+        if (v <= 33) {
+          card.classList.add("mode-conventional");
+          label.textContent = "Lab-Standard Focus";
+        } else if (v >= 67) {
+          card.classList.add("mode-natural");
+          label.textContent = "Natural Lineage Focus";
+        } else {
+          card.classList.add("mode-blend");
+          label.textContent = "Blended View";
+        }
+      };
+
+      slider.addEventListener("input", updateMode);
+      updateMode();
+
+      return card;
+    }
+
+    function renderMatrix() {
+      const list = document.getElementById("medicine-list");
+      if (!list) return;
+      list.innerHTML = "";
+      medicinePairs.forEach((pair) => {
+        list.appendChild(createMedicineCard(pair));
+      });
+    }
+
+    function setupNav() {
+      const tabs = document.querySelectorAll(".nav-tab");
+      const pages = document.querySelectorAll(".page");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.getAttribute("data-page");
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          pages.forEach((p) => {
+            if (p.id === target) {
+              p.classList.add("active");
+            } else {
+              p.classList.remove("active");
+            }
+          });
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMatrix();
+      setupNav();
+    });
+  </script>
+</body>
+</html>
