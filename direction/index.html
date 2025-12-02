@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- MODULE: Direction Field – HelpToHeal -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Direction Field – HelpToHeal</title>
+
+  <!-- STYLE: Core layout + HelpToHeal skin -->
+  <style>
+    :root {
+      --ht-bg: #f6f5f1;
+      --ht-panel: #ffffff;
+      --ht-header-bg: #d3efe9;
+      --ht-header-soft: #e3f5f1;
+      --ht-accent: #42a79a;
+      --ht-accent-soft: #9fd8ce;
+      --ht-accent-deep: #2f6f6b;
+      --ht-text-main: #163036;
+      --ht-text-soft: #4b5a63;
+      --ht-pill-bg: #f4fbf9;
+      --ht-shadow-soft: 0 18px 45px rgba(16, 40, 56, 0.12);
+      --ht-radius-lg: 22px;
+      --ht-radius-pill: 999px;
+      --df-beam-from: #9fd8ce;
+      --df-beam-to: #4aaea3;
+      --df-hint: #6a7b85;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fdfdfa 0, var(--ht-bg) 40%, #f1f3f5 100%);
+      color: var(--ht-text-main);
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px 40px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    body.page-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ht-shell {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* HEADER: Universal HelpToHeal header + nav */
+    .ht-header {
+      background: linear-gradient(135deg, var(--ht-header-bg), var(--ht-header-soft));
+      border-radius: 30px;
+      padding: 16px 16px 6px;
+      box-shadow: var(--ht-shadow-soft);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .ht-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.9), transparent 60%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .ht-header-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ht-brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ht-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ht-logo-pill {
+      background: var(--ht-pill-bg);
+      color: var(--ht-accent-deep);
+      padding: 6px 13px;
+      border-radius: var(--ht-radius-pill);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: 0.14em;
+    }
+
+    .ht-tag-pill {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: var(--ht-radius-pill);
+      border: 1px solid rgba(47, 111, 107, 0.16);
+      color: var(--ht-accent-deep);
+      background: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .ht-strap {
+      font-size: 13px;
+      color: var(--ht-text-soft);
+      max-width: 320px;
+    }
+
+    .ht-header-badge {
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ht-accent-deep);
+      box-shadow: 0 10px 28px rgba(15, 61, 57, 0.14);
+      white-space: nowrap;
+    }
+
+    .ht-header-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--ht-accent) 0, #267168 70%);
+    }
+
+    .ht-nav {
+      position: relative;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: -2px;
+      scrollbar-width: none;
+    }
+
+    .ht-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ht-nav-link {
+      position: relative;
+      border-radius: var(--ht-radius-pill);
+      padding: 7px 14px 9px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      border: none;
+      background: transparent;
+      color: rgba(12, 56, 51, 0.7);
+      text-decoration: none;
+      transition: background 180ms ease, color 180ms ease, transform 140ms ease;
+      flex-shrink: 0;
+    }
+
+    .ht-nav-link span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ht-nav-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: transparent;
+      transition: background 220ms ease;
+      z-index: 0;
+    }
+
+    .ht-nav-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .ht-nav-link:hover::after {
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .ht-nav-link-active {
+      color: var(--ht-accent-deep);
+      font-weight: 600;
+    }
+
+    .ht-nav-link-active::after {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .ht-nav-underline {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      height: 3px;
+      width: 120%;
+      background: linear-gradient(
+        90deg,
+        rgba(66, 167, 154, 0.25),
+        rgba(126, 208, 195, 0.9),
+        rgba(66, 167, 154, 0.35)
+      );
+      transform: translateX(-10%);
+      border-radius: 999px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* MAIN: Direction Field module */
+    main {
+      margin-top: 8px;
+    }
+
+    .df-main-card {
+      background: var(--ht-panel);
+      border-radius: 26px;
+      padding: 18px 16px 18px;
+      box-shadow: var(--ht-shadow-soft);
+      position: relative;
+      overflow: hidden;
+      animation: df-pop 520ms ease-out 80ms both;
+    }
+
+    .df-main-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      background: radial-gradient(circle at top left, rgba(184, 233, 223, 0.9), transparent 55%);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .df-main-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* SECTION: Hero intro */
+    .df-hero-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(56, 103, 101, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .df-hero-title {
+      font-size: 22px;
+      letter-spacing: 0.02em;
+      margin: 0 0 6px;
+      color: var(--ht-text-main);
+    }
+
+    .df-hero-sub {
+      font-size: 14px;
+      color: var(--ht-text-soft);
+      margin: 0;
+      max-width: 420px;
+    }
+
+    .df-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .df-hero-tag {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(66, 167, 154, 0.16);
+      background: rgba(244, 251, 249, 0.9);
+      color: rgba(31, 68, 64, 0.9);
+    }
+
+    /* SECTION: Direction beam visual */
+    .df-beam-shell {
+      margin-top: 6px;
+      padding: 10px 0 4px;
+    }
+
+    .df-beam-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--df-hint);
+      margin-bottom: 4px;
+    }
+
+    .df-beam-label-row span {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .df-beam {
+      position: relative;
+      height: 20px;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        rgba(159, 216, 206, 0.15),
+        rgba(66, 167, 154, 0.4),
+        rgba(159, 216, 206, 0.15)
+      );
+      overflow: hidden;
+    }
+
+    .df-beam-core {
+      position: absolute;
+      inset: 2px;
+      border-radius: inherit;
+      background-image: linear-gradient(
+        90deg,
+        var(--df-beam-from),
+        var(--df-beam-to),
+        var(--df-beam-from)
+      );
+      background-size: 240% 100%;
+      animation: df-beam-flow 3800ms linear infinite;
+      opacity: 0.9;
+    }
+
+    .df-beam-orb {
+      position: absolute;
+      top: 50%;
+      left: 52%;
+      transform: translate(-50%, -50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #ffffff 0, #e4faf3 40%, rgba(54, 129, 119, 0.8) 80%);
+      box-shadow: 0 0 18px rgba(52, 128, 118, 0.7);
+      animation: df-orb-breathe 2600ms ease-in-out infinite;
+    }
+
+    .df-beam-caption {
+      font-size: 11px;
+      color: var(--df-hint);
+      margin-top: 4px;
+    }
+
+    /* SECTION: Easy-read cards */
+    .df-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    @media (min-width: 720px) {
+      .df-main-card {
+        padding: 22px 22px 20px;
+      }
+      .df-grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      }
+    }
+
+    .df-card {
+      background: #f8fbfa;
+      border-radius: 20px;
+      border: 1px solid rgba(126, 206, 192, 0.35);
+      padding: 10px 12px 10px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease,
+        background 160ms ease;
+      cursor: pointer;
+    }
+
+    .df-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(32, 88, 80, 0.18);
+      background: #ffffff;
+      border-color: rgba(66, 167, 154, 0.6);
+    }
+
+    .df-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .df-card-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .df-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ht-text-main);
+    }
+
+    .df-card-tagline {
+      font-size: 12px;
+      color: var(--ht-text-soft);
+    }
+
+    .df-chip {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(66, 167, 154, 0.3);
+      background: rgba(255, 255, 255, 0.9);
+      color: rgba(38, 92, 85, 0.9);
+      white-space: nowrap;
+    }
+
+    .df-card-body {
+      font-size: 13px;
+      color: var(--ht-text-soft);
+      margin-top: 8px;
+      line-height: 1.48;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: max-height 260ms ease, opacity 240ms ease, transform 240ms ease;
+      overflow: hidden;
+    }
+
+    .df-card-body-open {
+      max-height: 260px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .df-bullets {
+      margin: 6px 0 0;
+      padding-left: 16px;
+    }
+
+    .df-bullets li {
+      margin-bottom: 4px;
+    }
+
+    .df-prompt {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(34, 80, 77, 0.9);
+      font-weight: 500;
+    }
+
+    .df-hint-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--df-hint);
+    }
+
+    .df-dot-soft {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(66, 167, 154, 0.7);
+    }
+
+    /* SECTION: Quick practices strip */
+    .df-practices {
+      background: #101417;
+      color: #f8faf7;
+      border-radius: 20px;
+      padding: 14px 14px 12px;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .df-practices::before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(circle at top right, rgba(120, 220, 197, 0.3), transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .df-practices-inner {
+      position: relative;
+    }
+
+    .df-practices-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(224, 245, 238, 0.85);
+      margin-bottom: 2px;
+    }
+
+    .df-practices-title {
+      font-size: 14px;
+      margin: 0 0 6px;
+    }
+
+    .df-practices-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .df-practices-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .df-pill-practice {
+      background: rgba(15, 24, 26, 0.75);
+      border-radius: 999px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(158, 220, 201, 0.45);
+    }
+
+    .df-pill-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #9fd8ce 0, #40a395 80%);
+      box-shadow: 0 0 10px rgba(121, 216, 194, 0.8);
+      flex-shrink: 0;
+    }
+
+    .df-pill-text-main {
+      font-weight: 500;
+    }
+
+    .df-pill-text-sub {
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    /* FOOTER: Universal HelpToHeal footer */
+    .ht-footer {
+      font-size: 12px;
+      color: var(--ht-text-soft);
+      margin-top: 18px;
+      padding: 4px 2px 0;
+      text-align: left;
+    }
+
+    .ht-footer-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(45, 93, 89, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .ht-footer-meta {
+      font-size: 11px;
+      color: rgba(98, 118, 124, 0.9);
+      margin-top: 6px;
+    }
+
+    /* ANIMATION: Cards pop */
+    @keyframes df-pop {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ANIMATION: Direction beam */
+    @keyframes df-beam-flow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 120% 50%;
+      }
+    }
+
+    @keyframes df-orb-breathe {
+      0% {
+        transform: translate(-50%, -50%) scale(0.95);
+        box-shadow: 0 0 10px rgba(52, 128, 118, 0.65);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.03);
+        box-shadow: 0 0 22px rgba(52, 128, 118, 0.95);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(0.95);
+        box-shadow: 0 0 10px rgba(52, 128, 118, 0.65);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ht-shell">
+    <!-- HEADER: Universal HelpToHeal header + navigation -->
+    <header class="ht-header">
+      <div class="ht-header-inner">
+        <div class="ht-brand-block">
+          <div class="ht-brand-row">
+            <div class="ht-logo-pill">HELPTOTHEAL</div>
+            <span class="ht-tag-pill">Healing hub</span>
+          </div>
+          <p class="ht-strap">Your clean field of natural, supportive, and reflective tools.</p>
+        </div>
+
+        <div class="ht-header-badge">
+          <span class="ht-header-badge-dot"></span>
+          <span>Reflection tools · Not treatment</span>
+        </div>
+      </div>
+
+      <nav class="ht-nav">
+        <a class="ht-nav-link" href="../index.html"><span>Home</span></a>
+        <a class="ht-nav-link" href="../natural-medicines/index.html"><span>Natural medicines</span></a>
+        <a class="ht-nav-link" href="../substance-heritage/index.html"><span>Substance heritage</span></a>
+        <a class="ht-nav-link ht-nav-link-active" href="./index.html"><span>Direction field</span></a>
+        <div class="ht-nav-underline"></div>
+      </nav>
+    </header>
+
+    <!-- MAIN: Direction Field module -->
+    <main>
+      <section class="df-main-card" aria-labelledby="df-title">
+        <div class="df-main-inner">
+          <!-- BLOCK: Hero intro -->
+          <header>
+            <p class="df-hero-label">Direction field · HelpToHeal module</p>
+            <h1 class="df-hero-title" id="df-title">Direction as a feeling, not a task list.</h1>
+            <p class="df-hero-sub">
+              This quick module helps you notice when your body is already pointing somewhere,
+              so direction feels simple and kind – not like homework for your brain.
+            </p>
+
+            <div class="df-hero-tags">
+              <span class="df-hero-tag">Low-effort guidance</span>
+              <span class="df-hero-tag">Body-based orientation</span>
+              <span class="df-hero-tag">3 short practices</span>
+            </div>
+          </header>
+
+          <!-- BLOCK: Direction beam visual -->
+          <section class="df-beam-shell" aria-label="Direction beam visualisation">
+            <div class="df-beam-label-row">
+              <span>drained</span>
+              <span>leaning forward</span>
+            </div>
+            <div class="df-beam">
+              <div class="df-beam-core"></div>
+              <div class="df-beam-orb"></div>
+            </div>
+            <p class="df-beam-caption">
+              Direction often arrives as a quiet “lean” in your system – before any plan or sentence appears.
+            </p>
+          </section>
+
+          <!-- BLOCK: Easy-read cards -->
+          <section class="df-grid" aria-label="Direction explanation cards">
+            <!-- CARD 1: Body Compass -->
+            <article class="df-card" data-card="body-compass">
+              <div class="df-card-head">
+                <div class="df-card-title-block">
+                  <h2 class="df-card-title">1. The body compass</h2>
+                  <p class="df-card-tagline">How your system whispers “this way.”</p>
+                </div>
+                <span class="df-chip">Tap to open</span>
+              </div>
+              <div class="df-card-body">
+                <p>
+                  Before you “decide,” your body usually shifts first. Direction shows up as:
+                </p>
+                <ul class="df-bullets">
+                  <li><strong>Chest:</strong> heavier and tight when it’s off, denser-but-steady when it fits.</li>
+                  <li><strong>Head:</strong> hot and foggy when forced, warm and open when it’s right-sized.</li>
+                  <li><strong>Body:</strong> limp when you’re done, quietly humming when there’s real pull.</li>
+                </ul>
+                <p class="df-prompt">
+                  You don’t have to analyse this. Just notice: heavier, lighter, or quietly steady?
+                </p>
+              </div>
+            </article>
+
+            <!-- CARD 2: Clarity Moments -->
+            <article class="df-card" data-card="clarity-moments">
+              <div class="df-card-head">
+                <div class="df-card-title-block">
+                  <h2 class="df-card-title">2. Clarity moments</h2>
+                  <p class="df-card-tagline">Why direction comes back after rest.</p>
+                </div>
+                <span class="df-chip">Tap to open</span>
+              </div>
+              <div class="df-card-body">
+                <p>
+                  When you’re under-fed, over-tired, or stressed, everything feels wrong at once.
+                  Direction hides inside the static.
+                </p>
+                <p>
+                  After food, sleep, or a calmer day, the same life can feel totally different:
+                </p>
+                <ul class="df-bullets">
+                  <li>One thing stops bothering you as much.</li>
+                  <li>Another thing quietly stands out as “this actually matters.”</li>
+                  <li>Your body softens around one option more than the others.</li>
+                </ul>
+                <p class="df-prompt">
+                  These small shifts are signals, not accidents. Direction often returns the second your system
+                  feels safe enough to care again.
+                </p>
+              </div>
+            </article>
+
+            <!-- CARD 3: Practical Tuning -->
+            <article class="df-card" data-card="practical-tuning">
+              <div class="df-card-head">
+                <div class="df-card-title-block">
+                  <h2 class="df-card-title">3. Practical tuning</h2>
+                  <p class="df-card-tagline">Three tiny checks, no overthinking.</p>
+                </div>
+                <span class="df-chip">Tap to open</span>
+              </div>
+              <div class="d
