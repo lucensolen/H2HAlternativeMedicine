@@ -31,9 +31,64 @@
       padding: 22px 14px;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ───────── FRAME: HEADER / NAV ───────── */
+    .frame-header {
+      width: 100%;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      padding: 12px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .frame-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .frame-logo {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-deep);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .frame-nav a {
+      margin-left: 14px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(74,174,163,0.2);
+      text-decoration: none;
+      color: var(--accent-deep);
+      font-size: .82rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .frame-nav a.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent-deep);
+    }
+
+    .frame-content {
+      width: 100%;
+      display: flex;
       justify-content: center;
     }
 
+    /* ───────── HUB SHELL ───────── */
     .hub-shell {
       width: 100%;
       max-width: 900px;
@@ -58,7 +113,7 @@
       z-index: -1;
     }
 
-    /* --- Header --- */
+    /* ───────── HUB HEADER ───────── */
     .brand-row {
       display: flex;
       align-items: center;
@@ -130,7 +185,7 @@
       font-size: .88rem;
     }
 
-    /* --- Section Cards --- */
+    /* ───────── MODULE CARDS ───────── */
     .module-list {
       margin-top: 24px;
       display: flex;
@@ -172,54 +227,97 @@
       font-size: 1.2rem;
       opacity: .45;
     }
+
+    /* ───────── FOOTER ───────── */
+    .frame-footer {
+      margin-top: 30px;
+      padding: 14px 0;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--text-soft);
+      opacity: 0.9;
+      width: 100%;
+    }
   </style>
 </head>
 
 <body>
 
-<div class="hub-shell">
-
-  <!-- Header -->
-  <div class="brand-row">
-    <div class="brand-mark">
-      <div class="brand-core"></div>
-    </div>
-    <div>
-      <h1>HELPTOTHEAL <span class="badge">Healing Hub</span></h1>
-      <p class="subtitle">Your clean field of natural, supportive, and reflective tools.</p>
+  <!-- UNIVERSAL HEADER -->
+  <div class="frame-header">
+    <div class="frame-inner">
+      <a href="/H2HAlternativeMedicine/" class="frame-logo">HelpToHeal</a>
+      <nav class="frame-nav">
+        <a href="/H2HAlternativeMedicine/" data-hh="home">Home</a>
+        <a href="/H2HAlternativeMedicine/natural-medicines/" data-hh="nm">Natural Medicines</a>
+        <a href="/H2HAlternativeMedicine/substances/" data-hh="sub">Substances</a>
+        <a href="/H2HAlternativeMedicine/home-content/" data-hh="content">Home Content</a>
+      </nav>
     </div>
   </div>
 
-  <!-- Modules -->
-  <div class="module-list">
+  <!-- CONTENT WRAPPER -->
+  <div class="frame-content">
+    <div class="hub-shell">
 
-    <a href="./natural-medicines/" class="module-card">
-      <div>
-        <div class="module-title">Natural Medicines Matrix</div>
-        <div class="module-desc">Compare standard medicines with time-tested natural supports.</div>
+      <div class="brand-row">
+        <div class="brand-mark">
+          <div class="brand-core"></div>
+        </div>
+        <div>
+          <h1>HELPTOTHEAL <span class="badge">Healing Hub</span></h1>
+          <p class="subtitle">Your clean field of natural, supportive, and reflective tools.</p>
+        </div>
       </div>
-      <div class="arrow">→</div>
-    </a>
 
-    <a href="./substances/" class="module-card">
-      <div>
-        <div class="module-title">Substance Heritage Matrix</div>
-        <div class="module-desc">Understand cultural, historical, and modern-use origins.</div>
+      <!-- MODULES -->
+      <div class="module-list">
+
+        <a href="./natural-medicines/" class="module-card">
+          <div>
+            <div class="module-title">Natural Medicines Matrix</div>
+            <div class="module-desc">Compare standard medicines with time-tested natural supports.</div>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="./substances/" class="module-card">
+          <div>
+            <div class="module-title">Substance Heritage Matrix</div>
+            <div class="module-desc">Understand cultural, historical, and modern-use origins.</div>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="./home-content/" class="module-card">
+          <div>
+            <div class="module-title">Home Content</div>
+            <div class="module-desc">Static info pages and supporting guidance.</div>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
       </div>
-      <div class="arrow">→</div>
-    </a>
 
-    <a href="./home-content/" class="module-card">
-      <div>
-        <div class="module-title">Home Content</div>
-        <div class="module-desc">Static info pages and supporting guidance.</div>
-      </div>
-      <div class="arrow">→</div>
-    </a>
-
+    </div>
   </div>
 
-</div>
+  <!-- UNIVERSAL FOOTER -->
+  <footer class="frame-footer">
+    © HelpToHeal – Guidance, clarity & clean-field tools.
+  </footer>
+
+  <!-- ACTIVE LINK HIGHLIGHTER -->
+  <script>
+    const path = window.location.pathname.toLowerCase();
+    document.querySelectorAll('.frame-nav a').forEach(a => {
+      const key = a.getAttribute('data-hh');
+      if (path.includes(key)) a.classList.add('active');
+      if (path.endsWith("/h2halternativemedicine/") && key === "home") {
+        a.classList.add("active");
+      }
+    });
+  </script>
 
 </body>
 </html>
