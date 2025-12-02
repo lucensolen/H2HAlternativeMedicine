@@ -1,134 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>HelpToHeal – App Shell</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  body {
-    margin: 0;
-    background: #f6f4ee;
-    font-family: system-ui, sans-serif;
-    color: #2c261e;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Brand bar */
-  .hth-brandbar {
-    width: 100%;
-    background: #fffaf2;
-    border-bottom: 1px solid #e5d7bb;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hth-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: conic-gradient(from 210deg,#c99b3a,#e5c67d,#f6ebc7,#c99b3a);
-    box-shadow: 0 4px 12px rgba(90,60,16,0.25);
-  }
-  .hth-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: .05em;
-    color: #7a5b24;
-  }
-
-  /* Frame loader */
-  #hth-frame-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0;
-  }
-
-  /* Footer nav */
-  .hth-footer {
-    width: 100%;
-    background: #fffaf2;
-    border-top: 1px solid #e5d7bb;
-    padding: 12px 10px;
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-  }
-  .hth-footer a {
-    text-decoration: none;
-    font-size: .9rem;
-    padding: 6px 14px;
-    background: #fffdf7;
-    border: 1px solid #dac8a4;
-    border-radius: 999px;
-    color: #7a5b24;
-    font-weight: 600;
-  }
-  .hth-footer a:hover {
-    background: #fff4d0;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>HelpToHeal – Tools Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #f6f5f1;
+      --accent: #c6a867;
+      --accent-soft: #e8d9b4;
+      --text-main: #3e3b35;
+      --text-soft: #7b7669;
+      --radius: 18px;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      padding: 28px 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .hub {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 38px rgba(0,0,0,0.08);
+      border: 1px solid rgba(198,168,103,0.4);
+    }
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: conic-gradient(from 200deg, #c6a867, #e8d9b4, #fff3d4, #c6a867);
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.4rem;
+      color: var(--text-main);
+    }
+    p {
+      margin: 0 0 20px 0;
+      color: var(--text-soft);
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    a.module {
+      text-decoration: none;
+      background: #faf8f3;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(198,168,103,0.3);
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+    a.module:hover {
+      background: #f3ecda;
+    }
+  </style>
 </head>
 <body>
 
-<!-- BRAND BAR -->
-<div class="hth-brandbar">
-  <div class="hth-logo"></div>
-  <div class="hth-title">HelpToHeal</div>
+<div class="hub">
+  <div class="logo"></div>
+  <h1>HelpToHeal Modules</h1>
+  <p>Your growing collection of alternative & supportive health tools.</p>
+
+  <div class="links">
+    <a href="./natural-medicines/" class="module">Natural Medicines Matrix →</a>
+    <a href="./substances/" class="module">Substance Heritage Matrix →</a>
+    <a href="./home-content/" class="module">Home Content →</a>
+  </div>
 </div>
-
-<!-- CONTENT LOADER -->
-<div id="hth-frame-content"></div>
-
-<!-- FOOTER NAV -->
-<div class="hth-footer">
-  <a href="#natural">Natural Matrix</a>
-  <a href="#substance">Substance Matrix</a>
-  <a href="#home">Home</a>
-</div>
-
-<script>
-/* ROUTER */
-function loadModule(route) {
-  const frame = document.getElementById("hth-frame-content");
-
-  const routes = {
-    home: "index.html",
-    natural: "natural-medicines/index.html",
-    substance: "substance-matrix/index.html"
-  };
-
-  const path = routes[route] || routes["home"];
-
-  fetch(path)
-    .then(res => res.text())
-    .then(html => {
-      // Extract ONLY the <body> inner content from the module
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-
-      const inner =
-        temp.querySelector("body")?.innerHTML ||
-        temp.innerHTML;
-
-      frame.innerHTML = inner;
-      window.scrollTo(0, 0);
-    })
-    .catch(() => {
-      frame.innerHTML = "<p style='padding:20px;'>Module failed to load.</p>";
-    });
-}
-
-/* HASH ROUTER LISTENER */
-window.addEventListener("hashchange", () => {
-  loadModule(location.hash.replace("#", ""));
-});
-
-/* INITIAL LOAD */
-loadModule(location.hash.replace("#", "") || "home");
-</script>
 
 </body>
 </html>
