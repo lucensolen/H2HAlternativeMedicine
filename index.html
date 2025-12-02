@@ -34,6 +34,82 @@
       justify-content: center;
     }
 
+    <!-- UNIVERSAL HELPTOHEAL NAVBAR -->
+<style>
+  .hh-nav-container {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    padding: 10px 0 6px;
+    background: linear-gradient(to bottom, rgba(246,245,241,0.95), rgba(246,245,241,0.75));
+    backdrop-filter: blur(8px);
+  }
+
+  .hh-nav {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 6px 10px;
+  }
+
+  .hh-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hh-nav-btn {
+    flex: 0 0 auto;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid rgba(74,174,163,0.25);
+    color: #2f6f6b;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 18px rgba(16,38,36,0.06);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: 0.2s ease;
+  }
+
+  .hh-nav-btn:hover {
+    background: #f0f7f6;
+  }
+
+  .hh-nav-btn.active {
+    background: #e4f5f2;
+    border: 1px solid rgba(74,174,163,0.45);
+    box-shadow: 0 8px 22px rgba(16,38,36,0.10);
+  }
+</style>
+
+<div class="hh-nav-container">
+  <div class="hh-nav">
+    <a href="../" class="hh-nav-btn" data-hh="home">Home</a>
+    <a href="../natural-medicines/" class="hh-nav-btn" data-hh="nm">Natural Medicines</a>
+    <a href="../substances/" class="hh-nav-btn" data-hh="sub">Substance Matrix</a>
+    <a href="../home-content/" class="hh-nav-btn" data-hh="content">Home Content</a>
+  </div>
+</div>
+
+<script>
+  /* Highlight current nav item automatically */
+  const path = window.location.pathname;
+
+  if (path.includes("natural-medicines")) {
+    document.querySelector('[data-hh="nm"]').classList.add("active");
+  } else if (path.includes("substances")) {
+    document.querySelector('[data-hh="sub"]').classList.add("active");
+  } else if (path.includes("home-content")) {
+    document.querySelector('[data-hh="content"]').classList.add("active");
+  } else {
+    document.querySelector('[data-hh="home"]').classList.add("active");
+  }
+</script>
+
     .hub-shell {
       width: 100%;
       max-width: 900px;
