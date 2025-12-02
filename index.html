@@ -31,74 +31,229 @@
       padding: 22px 14px;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* ───────── FRAME: HEADER / NAV ───────── */
-    .frame-header {
-      width: 100%;
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      margin-bottom: 20px;
-      padding: 12px 0;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-    }
-
-    .frame-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .frame-logo {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--accent-deep);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-    }
-
-    .frame-nav a {
-      margin-left: 14px;
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      background: rgba(255,255,255,0.8);
-      border: 1px solid rgba(74,174,163,0.2);
-      text-decoration: none;
-      color: var(--accent-deep);
-      font-size: .82rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .frame-nav a.active {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      color: var(--accent-deep);
-    }
-
-    .frame-content {
-      width: 100%;
-      display: flex;
       justify-content: center;
     }
 
-    /* ───────── HUB SHELL ───────── */
-    .hub-shell {
+    .hh-frame {
       width: 100%;
       max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ===== UNIVERSAL HEADER (Fieldwright-style) ===== */
+
+    .hh-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-radius: 26px;
+      padding: 14px 18px 10px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(186,236,227,0.55), transparent 65%),
+        radial-gradient(circle at 90% 0%, rgba(133,210,203,0.5), transparent 65%),
+        linear-gradient(135deg, #f5faf8, #e5f2ef);
+      box-shadow: 0 18px 40px rgba(16,38,36,0.28);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(74,174,163,0.22);
+      overflow: hidden;
+      transition: padding 0.22s ease, border-radius 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .hh-header.compact {
+      padding: 8px 16px 6px;
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(16,38,36,0.22);
+    }
+
+    .hh-header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .hh-header.compact .hh-header-top {
+      transform: translateY(-2px) scale(0.96);
+      opacity: 0.96;
+    }
+
+    .hh-brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: conic-gradient(from 210deg, #4aaea3, #85d4ca, #c4f3ea, #4aaea3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 22px rgba(13,54,52,0.32);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hh-brand-mark::before {
+      content: "";
+      width: 62%;
+      height: 62%;
+      border-radius: 50%;
+      border: 2px solid rgba(246,249,248,0.9);
+      box-shadow: inset 0 0 0 1px rgba(13,40,38,0.16);
+    }
+
+    .hh-brand-core {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.9);
+      animation: hhCorePulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes hhCorePulse {
+      0% { transform: scale(1); opacity: .9; }
+      60% { transform: scale(1.45); opacity: .4; }
+      100% { transform: scale(1); opacity: .9; }
+    }
+
+    .hh-title-block h1 {
+      font-size: 1.1rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .hh-title-block .hh-badge {
+      font-size: .68rem;
+      padding: 2px 9px;
+      border-radius: var(--radius-pill);
+      background: rgba(74,174,163,0.1);
+      border: 1px solid rgba(74,174,163,0.32);
+      color: var(--accent-deep);
+      font-weight: 550;
+    }
+
+    .hh-title-block p {
+      color: var(--text-soft);
+      margin-top: 1px;
+      font-size: .82rem;
+      max-width: 420px;
+    }
+
+    .hh-header-spacer {
+      flex: 1;
+    }
+
+    .hh-header-pill {
+      font-size: .72rem;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(74,174,163,0.3);
+      background: rgba(246,252,250,0.96);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-deep);
+      font-weight: 550;
+    }
+
+    .hh-header-pill span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(74,174,163,0.9);
+    }
+
+    /* Nav row */
+
+    .hh-nav-row {
+      margin-top: 4px;
+    }
+
+    .hh-nav-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 6px 2px 2px;
+      scrollbar-width: none;
+    }
+
+    .hh-nav-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hh-nav-item {
+      flex: 0 0 auto;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      padding: 7px 16px;
+      font-size: .83rem;
+      font-weight: 560;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: rgba(247,252,251,0.9);
+      border: 1px solid rgba(74,174,163,0.22);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .hh-nav-item:hover {
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(16,38,36,0.18);
+    }
+
+    .hh-nav-item.is-active {
+      background: #ffffff;
+      color: var(--accent-deep);
+      box-shadow: 0 7px 20px rgba(16,38,36,0.22);
+      border-color: rgba(74,174,163,0.65);
+    }
+
+    .hh-nav-track {
+      position: relative;
+      margin-top: 6px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(186,214,208,0.7), rgba(222,237,234,0.9));
+      overflow: hidden;
+    }
+
+    .hh-nav-thumb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4aaea3, #7fd5c9);
+      box-shadow: 0 0 10px rgba(74,174,163,0.8);
+      transform: translateX(0);
+      transition: transform 0.2s ease, width 0.2s ease;
+      width: 80px;
+    }
+
+    /* ===== HUB CARD ===== */
+
+    .hub-shell {
+      width: 100%;
       border-radius: 28px;
       background: linear-gradient(135deg, #fbfbfa, #f2f7f6);
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(74,174,163,0.16);
-      padding: 24px 22px 32px;
+      padding: 24px 22px 20px;
       position: relative;
       overflow: hidden;
+      transition: box-shadow 0.22s ease, transform 0.22s ease;
     }
 
     .hub-shell::before {
@@ -113,81 +268,15 @@
       z-index: -1;
     }
 
-    /* ───────── HUB HEADER ───────── */
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
+    .hub-shell.compact {
+      box-shadow: 0 12px 30px rgba(16,38,36,0.18);
+      transform: translateY(1px);
     }
 
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      border-radius: 18px;
-      background: conic-gradient(from 210deg, #4aaea3, #85d4ca, #c4f3ea, #4aaea3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 28px rgba(13,54,52,0.28);
-      position: relative;
-      overflow: hidden;
-    }
-    .brand-mark::before {
-      content: "";
-      width: 60%;
-      height: 60%;
-      border-radius: 50%;
-      border: 2px solid rgba(246,249,248,0.85);
-      box-shadow: inset 0 0 0 1px rgba(13,40,38,0.15);
-    }
+    /* --- Modules list --- */
 
-    .brand-core {
-      position: absolute;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 7px rgba(255,255,255,0.9);
-      animation: pulse 2.4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: .9; }
-      60% { transform: scale(1.45); opacity: .4; }
-      100% { transform: scale(1); opacity: .9; }
-    }
-
-    h1 {
-      font-size: 1.28rem;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-      color: var(--accent-deep);
-      font-weight: 650;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .badge {
-      font-size: .69rem;
-      padding: 2px 9px;
-      border-radius: var(--radius-pill);
-      background: rgba(74,174,163,0.1);
-      border: 1px solid rgba(74,174,163,0.3);
-      color: var(--accent-deep);
-      font-weight: 550;
-    }
-
-    p.subtitle {
-      color: var(--text-soft);
-      margin-top: 2px;
-      font-size: .88rem;
-    }
-
-    /* ───────── MODULE CARDS ───────── */
     .module-list {
-      margin-top: 24px;
+      margin-top: 4px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -201,14 +290,16 @@
       box-shadow: 0 10px 32px rgba(16,38,36,0.08);
       text-decoration: none;
       color: var(--text-main);
-
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
     }
 
     .module-card:hover {
       background: #f7fbfa;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 36px rgba(16,38,36,0.12);
     }
 
     .module-title {
@@ -228,55 +319,98 @@
       opacity: .45;
     }
 
-    /* ───────── FOOTER ───────── */
-    .frame-footer {
-      margin-top: 30px;
-      padding: 14px 0;
-      text-align: center;
-      font-size: .8rem;
+    /* ===== FOOTER ===== */
+
+    .hub-footer {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(151,179,174,0.7);
+      font-size: .76rem;
       color: var(--text-soft);
-      opacity: 0.9;
-      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hub-footer span.label {
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 580;
+      font-size: .7rem;
+      color: var(--accent-deep);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px 8px;
+      }
+
+      .hh-header {
+        padding: 12px 12px 8px;
+        border-radius: 22px;
+      }
+
+      .hh-frame {
+        gap: 12px;
+      }
+
+      .hub-shell {
+        padding: 18px 14px 16px;
+      }
+
+      .hh-title-block p {
+        max-width: none;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="hh-frame">
 
-  <!-- UNIVERSAL HEADER -->
-  <div class="frame-header">
-    <div class="frame-inner">
-      <a href="/H2HAlternativeMedicine/" class="frame-logo">HelpToHeal</a>
-      <nav class="frame-nav">
-        <a href="/H2HAlternativeMedicine/" data-hh="home">Home</a>
-        <a href="/H2HAlternativeMedicine/natural-medicines/" data-hh="nm">Natural Medicines</a>
-        <a href="/H2HAlternativeMedicine/substances/" data-hh="sub">Substances</a>
-        <a href="/H2HAlternativeMedicine/home-content/" data-hh="content">Home Content</a>
-      </nav>
-    </div>
-  </div>
-
-  <!-- CONTENT WRAPPER -->
-  <div class="frame-content">
-    <div class="hub-shell">
-
-      <div class="brand-row">
-        <div class="brand-mark">
-          <div class="brand-core"></div>
+    <!-- UNIVERSAL HELPTOHEAL HEADER -->
+    <header class="hh-header" id="hhHeader">
+      <div class="hh-header-top">
+        <div class="hh-brand-mark">
+          <div class="hh-brand-core"></div>
         </div>
-        <div>
-          <h1>HELPTOTHEAL <span class="badge">Healing Hub</span></h1>
-          <p class="subtitle">Your clean field of natural, supportive, and reflective tools.</p>
+        <div class="hh-title-block">
+          <h1>HELPTOTHEAL <span class="hh-badge">Healing Hub</span></h1>
+          <p>Your clean field of natural, supportive, and reflective tools.</p>
+        </div>
+        <div class="hh-header-spacer"></div>
+        <div class="hh-header-pill">
+          <span class="dot"></span>
+          <span>Reflection tools · Not treatment</span>
         </div>
       </div>
 
-      <!-- MODULES -->
+      <div class="hh-nav-row">
+        <div class="hh-nav-scroll" id="hhNavScroll">
+          <!-- NOTE: on module pages, switch ./ to ../ for these hrefs -->
+          <a href="./" class="hh-nav-item" data-hh="home">Home</a>
+          <a href="./natural-medicines/" class="hh-nav-item" data-hh="nm">Natural Medicines</a>
+          <a href="./substances/" class="hh-nav-item" data-hh="sub">Substance Matrix</a>
+          <a href="./home-content/" class="hh-nav-item" data-hh="content">Home Content</a>
+        </div>
+        <div class="hh-nav-track">
+          <div class="hh-nav-thumb" id="hhNavThumb"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- HUB CARD -->
+    <main class="hub-shell" id="hubShell">
+
       <div class="module-list">
 
         <a href="./natural-medicines/" class="module-card">
           <div>
             <div class="module-title">Natural Medicines Matrix</div>
-            <div class="module-desc">Compare standard medicines with time-tested natural supports.</div>
+            <div class="module-desc">
+              Compare standard medicines with time-tested natural supports.
+            </div>
           </div>
           <div class="arrow">→</div>
         </a>
@@ -284,7 +418,9 @@
         <a href="./substances/" class="module-card">
           <div>
             <div class="module-title">Substance Heritage Matrix</div>
-            <div class="module-desc">Understand cultural, historical, and modern-use origins.</div>
+            <div class="module-desc">
+              Understand cultural, historical, and modern-use origins.
+            </div>
           </div>
           <div class="arrow">→</div>
         </a>
@@ -292,32 +428,94 @@
         <a href="./home-content/" class="module-card">
           <div>
             <div class="module-title">Home Content</div>
-            <div class="module-desc">Static info pages and supporting guidance.</div>
+            <div class="module-desc">
+              Static info pages and supporting guidance.
+            </div>
           </div>
           <div class="arrow">→</div>
         </a>
 
       </div>
 
-    </div>
+      <div class="hub-footer">
+        <span class="label">HelpToHeal Field</span>
+        <span>Use these tools to reflect, then take decisions with real-world professionals.</span>
+      </div>
+
+    </main>
   </div>
 
-  <!-- UNIVERSAL FOOTER -->
-  <footer class="frame-footer">
-    © HelpToHeal – Guidance, clarity & clean-field tools.
-  </footer>
-
-  <!-- ACTIVE LINK HIGHLIGHTER -->
   <script>
-    const path = window.location.pathname.toLowerCase();
-    document.querySelectorAll('.frame-nav a').forEach(a => {
-      const key = a.getAttribute('data-hh');
-      if (path.includes(key)) a.classList.add('active');
-      if (path.endsWith("/h2halternativemedicine/") && key === "home") {
-        a.classList.add("active");
-      }
-    });
-  </script>
+    // NAV ACTIVE STATE + UNDERLINE POSITION
+    (function () {
+      const tabs = Array.from(document.querySelectorAll(".hh-nav-item"));
+      const thumb = document.getElementById("hhNavThumb");
+      const header = document.getElementById("hhHeader");
+      const shell = document.getElementById("hubShell");
 
+      function setActiveByPath() {
+        const path = window.location.pathname;
+        let active = tabs[0];
+
+        tabs.forEach(tab => {
+          const key = tab.dataset.hh;
+          if (key === "home" && (path.endsWith("/") || path.endsWith("index.html"))) {
+            active = tab;
+          } else if (key === "nm" && path.includes("natural-medicines")) {
+            active = tab;
+          } else if (key === "sub" && path.includes("substances")) {
+            active = tab;
+          } else if (key === "content" && path.includes("home-content")) {
+            active = tab;
+          }
+        });
+
+        tabs.forEach(t => t.classList.remove("is-active"));
+        active.classList.add("is-active");
+        moveThumb(active);
+      }
+
+      function moveThumb(activeTab) {
+        if (!thumb || !activeTab) return;
+        const track = thumb.parentElement;
+        const trackRect = track.getBoundingClientRect();
+        const rect = activeTab.getBoundingClientRect();
+        const width = rect.width;
+
+        thumb.style.width = width + "px";
+        thumb.style.transform = "translateX(" + (rect.left - trackRect.left) + "px)";
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          tabs.forEach(t => t.classList.remove("is-active"));
+          tab.classList.add("is-active");
+          moveThumb(tab);
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        const active = document.querySelector(".hh-nav-item.is-active");
+        if (active) moveThumb(active);
+      });
+
+      window.addEventListener("load", () => {
+        setActiveByPath();
+      });
+
+      // HEADER COMPACT ON SCROLL (Fieldwright-style)
+      window.addEventListener("scroll", () => {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        if (y > 40) {
+          header.classList.add("compact");
+          shell.classList.add("compact");
+        } else {
+          header.classList.remove("compact");
+          shell.classList.remove("compact");
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
+```0
